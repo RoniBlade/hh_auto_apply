@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профили - HH Auto Apply</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">HH</div>
+            <span>Auto Apply</span>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="/">Поиск вакансий</a></li>
+              <li><a href="/profiles">Профили</a></li>
+              <li><a href="/history">История</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <div class="page-header">
+          <h1>Мои профили</h1>
+          <p class="page-subtitle">Управляйте профилями для автоматических откликов</p>
+        </div>
+
+        <section class="create-profile-section card">
+          <div class="create-profile-header">
+            <h2 class="create-profile-title">Создать новый профиль</h2>
+            <p class="create-profile-subtitle">
+              Добавьте новый профиль для автоматических откликов
+            </p>
+          </div>
+          <button
+            class="btn btn-primary btn-with-icon"
+            onclick="openModal('create-profile-modal')"
+          >
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </span>
+            <span class="btn-text">Создать профиль</span>
+          </button>
+        </section>
+
+        <section class="profiles-section">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <h2>Существующие профили</h2>
+          </div>
+          <div id="profiles-grid" class="profiles-grid">
+            <div class="empty-state">
+              <div class="empty-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <h3>Нет созданных профилей</h3>
+              <p>Создайте первый профиль для автоматических откликов</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div id="create-profile-modal" class="modal">
+      <div class="modal-content" style="max-width: 600px;">
+        <button class="modal-close" onclick="closeModal('create-profile-modal')">&times;</button>
+        <h2 class="modal-title">Создание профиля</h2>
+
+        <div class="modal-grid">
+          <div class="modal-column">
+            <h3>Основное</h3>
+            <div class="form-group">
+              <label class="form-label">Название профиля *</label>
+              <input type="text" id="p-name" class="form-input" placeholder="Java Junior Developer">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Описание</label>
+              <input type="text" id="p-desc" class="form-input" placeholder="Краткое описание профиля">
+            </div>
+            <div class="form-group">
+              <label class="form-label">ID резюме</label>
+              <input type="text" id="p-resume" class="form-input" placeholder="Из URL резюме на HH.ru">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Исключить слова</label>
+              <input type="text" id="p-bad" class="form-input" placeholder="Senior, Lead, Architect">
+            </div>
+          </div>
+          <div class="modal-column">
+            <h3>API Keys HH.ru *</h3>
+            <div class="form-group">
+              <label class="form-label">Client ID *</label>
+              <input type="text" id="p-cid" class="form-input" placeholder="Ваш Client ID">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Client Secret *</label>
+              <input type="password" id="p-csec" class="form-input" placeholder="Ваш Client Secret">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Redirect URI</label>
+              <input type="text" id="p-ruri" class="form-input" value="http://localhost:8000/static/profiles.html" placeholder="Redirect URI">
+            </div>
+            <small class="form-hint">* Обязательные поля</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Текст отклика</label>
+          <textarea id="p-letter" class="form-textarea" placeholder="Напишите текст сопроводительного письма..." rows="4"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-outline" onclick="closeModal('create-profile-modal')">
+            Отмена
+          </button>
+          <button class="btn btn-primary" onclick="createProfile()">
+            <span class="btn-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+            </span>
+            Создать профиль
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="edit-profile-modal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('edit-profile-modal')">&times;</button>
+        <h2 class="modal-title">Редактирование профиля</h2>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M12 16h.01M12 8v4"/>
+            </svg>
+          </div>
+          <h3>Функционал в разработке</h3>
+          <p>Редактирование профилей будет доступно в следующем обновлении</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="closeModal('edit-profile-modal')">
+            Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="notification" id="notification">
+      <div class="notification-content">
+        <span class="notification-icon"></span>
+        <span class="notification-text"></span>
+      </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>

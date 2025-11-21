@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>История откликов - HH Auto Apply</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">HH</div>
+            <span>Auto Apply</span>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="/">Поиск вакансий</a></li>
+              <li><a href="/profiles">Профили</a></li>
+              <li><a href="/history">История</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <div class="page-header">
+          <h1>История откликов</h1>
+          <p class="page-subtitle">Отслеживайте статусы ваших откликов и анализируйте статистику</p>
+        </div>
+
+        <section class="history-section card">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h2>Фильтры истории</h2>
+          </div>
+
+          <div class="history-filters">
+            <div class="filter-group">
+              <label class="filter-label">Статус</label>
+              <select id="status-filter" class="filter-select">
+                <option value="">Все статусы</option>
+                <option value="accepted">Принят</option>
+                <option value="pending">Ожидание</option>
+                <option value="rejected">Отклонен</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Дата от</label>
+              <input type="date" id="date-from-filter" class="filter-input" />
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Дата до</label>
+              <input type="date" id="date-to-filter" class="filter-input" />
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">&nbsp;</label>
+              <button class="btn btn-primary" onclick="applyHistoryFilters()">
+                Применить фильтры
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="history-section card">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+            </div>
+            <h2>История откликов</h2>
+          </div>
+
+          <div class="table-container">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>ДАТА ОТКЛИКА</th>
+                  <th>ВАКАНСИЯ</th>
+                  <th>КОМПАНИЯ</th>
+                  <th>СТАТУС</th>
+                  <th>ИД ВАКАНСИИ</th> <!-- Новый столбец для ID вакансии -->
+                  <th>ДЕЙСТВИЯ</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- История откликов будет вставлена сюда -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="analytics-section card">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <h2>Анализ откликов</h2>
+          </div>
+
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <h3>Статусы откликов</h3>
+              <div class="chart-container">
+                <div id="status-chart" class="chart-placeholder">
+                  <div class="empty-state">
+                    <div class="empty-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                        <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                      </svg>
+                    </div>
+                    <p>Нет данных для графика</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="analytics-card">
+              <h3>Статистика по месяцам</h3>
+              <div class="chart-container">
+                <div id="monthly-chart" class="chart-placeholder">
+                  <div class="empty-state">
+                    <div class="empty-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                      </svg>
+                    </div>
+                    <p>Нет данных для графика</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-actions">
+            <button class="btn btn-outline btn-with-icon" onclick="exportHistory('csv')">
+              <span class="btn-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </span>
+              <span class="btn-text">Экспорт в CSV</span>
+            </button>
+            <button class="btn btn-outline btn-with-icon" onclick="exportHistory('pdf')">
+              <span class="btn-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </span>
+              <span class="btn-text">Экспорт в PDF</span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="notification" id="notification">
+      <div class="notification-content">
+        <span class="notification-icon"></span>
+        <span class="notification-text"></span>
+      </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>

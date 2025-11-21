@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Поиск вакансий - HH Auto Apply</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">HH</div>
+            <span>Auto Apply</span>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="/">Поиск вакансий</a></li>
+              <li><a href="/profiles">Профили</a></li>
+              <li><a href="/history">История</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <div class="page-header">
+          <h1>Поиск вакансий</h1>
+          <p class="page-subtitle">Найдите подходящие вакансии и автоматически отправляйте отклики</p>
+        </div>
+
+        <section class="search-section card">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+            </div>
+            <h2>Ключевые слова</h2>
+          </div>
+          <div class="search-form">
+            <div class="input-with-icon">
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Введите ключевые слова (например, Java Developer)"
+              />
+              <span class="input-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+              </span>
+            </div>
+            <button class="btn btn-primary btn-with-icon" onclick="searchVacancies()">
+              <span class="btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </span>
+              <span class="btn-text">Искать вакансии</span>
+            </button>
+          </div>
+
+          <div class="search-tips">
+            <h4>Советы для поиска:</h4>
+            <ul>
+              <li>Используйте конкретные технологии (React, Python, SQL)</li>
+              <li>Указывайте уровень (Junior, Middle, Senior)</li>
+              <li>Добавляйте сферу (FinTech, E-commerce, SaaS)</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="response-section card">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+              </svg>
+            </div>
+            <h2>Автоматический отклик</h2>
+          </div>
+          <p class="section-subtitle">
+            Текст отклика берется из <strong>активного профиля</strong>. Убедитесь, что выбран правильный профиль.
+          </p>
+
+          <div class="active-profile-indicator">
+            <div class="profile-badge">
+              <span class="badge-dot"></span>
+              <span class="badge-text">Активный профиль: <span id="active-profile-name">Не выбран</span></span>
+                  <a href="/profiles" class="change-profile-link">Изменить</a>
+            </div>
+          </div>
+
+          <button class="btn btn-success btn-full-width btn-apply-all btn-with-icon" onclick="autoApplyToAll()">
+            <span class="btn-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+                <path d="M12 7v5l4 2"></path>
+              </svg>
+            </span>
+            <span class="btn-text">Запустить автоотклики на все найденные</span>
+          </button>
+
+          <div class="manual-apply-info">
+            <div class="info-header">
+              <h4>Ручной отклик</h4>
+              <span class="info-badge">Опционально</span>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Текст для ручного отклика</label>
+              <textarea
+                id="response-textarea"
+                class="form-textarea"
+                placeholder="Этот текст будет использован, если вы нажмете 'Откликнуться' вручную..."
+                rows="4"
+              ></textarea>
+              <div class="textarea-footer">
+                <small style="color: var(--text-secondary);">
+                  *Для ручного отклика (кнопка <strong>"Откликнуться"</strong> рядом с вакансией) используйте это поле.
+                </small>
+                <div class="char-count">0/2000</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="results-section">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+            </div>
+            <h2>Найденные вакансии</h2>
+            <div class="results-stats">
+              <span class="stats-text">Найдено: <strong id="vacancies-count">0</strong></span>
+              <span class="stats-text">Откликов: <strong id="responses-count">0</strong></span>
+            </div>
+          </div>
+
+          <div class="results-controls">
+            <div class="sort-controls">
+              <label class="filter-label">Сортировка:</label>
+              <select class="filter-select">
+                <option>По релевантности</option>
+                <option>По дате</option>
+                <option>По зарплате</option>
+              </select>
+            </div>
+            <div class="view-controls">
+              <button class="view-btn active" data-view="grid">Сетка</button>
+              <button class="view-btn" data-view="list">Список</button>
+            </div>
+          </div>
+
+          <div id="vacancies-grid" class="vacancies-grid">
+            <div class="empty-state">
+              <div class="empty-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+              </div>
+              <h3>Начните поиск вакансий</h3>
+              <p>Введите ключевые слова в поле выше и нажмите "Искать вакансии"</p>
+            </div>
+          </div>
+
+          <div class="load-more-section">
+            <button class="btn btn-outline btn-load-more">
+              <span class="btn-text">Загрузить еще</span>
+              <span class="btn-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="notification" id="notification">
+      <div class="notification-content">
+        <span class="notification-icon"></span>
+        <span class="notification-text"></span>
+      </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>

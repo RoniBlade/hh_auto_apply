@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизация</title>
+</head>
+<body>
+    <script>
+        // Получаем код из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get('code');
+
+        // Если код авторизации есть, отправляем его на сервер
+        if (authCode) {
+            // Убедитесь, что передаете правильный ID профиля
+            const profileId = 1; // Например, это должен быть ID активного профиля
+
+            fetch('http://localhost:8000/api/auth/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    profile_id: profileId,
+                    auth_code: authCode
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'authorized') {
+                    // Успешная авторизация, закрываем окно и возвращаемся на страницу профилей
+                    alert('Авторизация прошла успешно!');
+                    window.opener.location.href = '/profiles'; // Перенаправляем в профили
+                    window.close(); // Закрываем окно авторизации
+                } else {
+                    alert('Ошибка авторизации');
+                    window.close(); // Закрываем окно, если ошибка
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при обмене кода на токен:', error);
+                alert('Ошибка авторизации');
+                window.close(); // Закрываем окно в случае ошибки
+            });
+        } else {
+            alert('Нет кода авторизации');
+            window.close(); // Закрываем окно, если нет кода
+        }
+    </script>
+</body>
+</html>
